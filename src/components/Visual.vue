@@ -3,11 +3,9 @@
     <div
       v-for="(item, key) in items"
       :key="key"
-      :style="{ height: item.value + 'pt' }"
+      :style="{ height: item + 'pt' }"
       class="candle"
-    >
-      {{ item.value }}
-    </div>
+    ></div>
   </div>
 </template>
 
@@ -26,7 +24,7 @@ export default {
 }
 
 .candle {
-  width: 10pt;
+  width: 2pt;
   background-color: gray;
   border: 1px solid black;
   margin-right: 2pt;

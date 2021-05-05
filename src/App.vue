@@ -17,7 +17,7 @@ import { simple as simpleSorter } from "./services/SorterService";
 
 import Visual from "./components/Visual";
 
-import { simple as simpleData } from "./data/items";
+import { generateur } from "./data/items";
 
 export default {
   name: "App",
@@ -26,30 +26,40 @@ export default {
   },
   data() {
     return {
-      items: null,
+      items: [],
+      sorted: [],
       swaps: [],
     };
   },
   methods: {
     sort() {
-      this.items = simpleSorter(this.items);
+      this.sorted = simpleSorter(this.sorted);
     },
     captureSwap(operation) {
       this.swaps.push(operation);
     },
-    swap(items) {},
+    swap(indexes) {
+      const data = [...this.items];
+
+      const tmp = data[indexes[0]];
+
+      data[indexes[0]] = data[indexes[1]];
+      data[indexes[1]] = tmp;
+
+      this.items = data;
+    },
   },
   mounted() {
-    this.items = simpleData;
     Bus.$on("swap", this.captureSwap);
+
+    this.items = generateur(80, 190);
+    this.sorted = this.items;
+
     setInterval(() => {
       if (this.swaps.length) {
-        this.swap(this.swaps.shift);
+        this.swap(this.swaps.shift());
       }
-    }, 1000);
+    }, 10);
   },
 };
 </script>
-
-<style>
-</style>

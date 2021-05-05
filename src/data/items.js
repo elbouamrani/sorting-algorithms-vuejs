@@ -1,32 +1,9 @@
-export const simple = [
-  {
-    value: 66
-  },
-  {
-    value: 44
-  },
-  {
-    value: 25
-  },
-  {
-    value: 88
-  },
-  {
-    value: 36
-  },
-  {
-    value: 85
-  },
-  {
-    value: 75
-  },
-  {
-    value: 45
-  },
-  {
-    value: 11
-  },
-  {
-    value: 87
+export const simple = [66, 44, 25, 88, 36, 85, 75, 45, 11, 87];
+
+export const generateur = (size, max) => {
+  const items = [];
+  for (let index = 0; index < size; index++) {
+    items.push(Math.round(Math.random() * max));
   }
-];
+  return items;
+};
