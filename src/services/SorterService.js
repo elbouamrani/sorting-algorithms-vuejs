@@ -17,11 +17,11 @@ const swap = (items, i, j) => {
   items[j] = tmp;
 };
 
-const partition = (items, pivot, left, right) => {
-  var pivotValue = items[pivot],
+const partitioner = (items, pivot, left, right) => {
+  let pivotValue = items[pivot],
     partitionIndex = left;
 
-  for (var i = left; i < right; i++) {
+  for (let i = left; i < right; i++) {
     if (items[i] < pivotValue) {
       swap(items, i, partitionIndex);
       partitionIndex++;
@@ -72,16 +72,15 @@ export const Algorithms = {
     return items;
   },
   quickSort: (items, left = 0, right) => {
-    var pivot, partitionIndex;
+    let pivot, partitionIndex;
+    console.log(partitioner);
 
     if (!right) {
       right = items.length;
     }
-    console.log(right);
-
     if (left < right) {
       pivot = right;
-      partitionIndex = partition(items, pivot, left, right);
+      partitionIndex = partitioner(items, pivot, left, right);
 
       Algorithms.quickSort(items, left, partitionIndex - 1);
       Algorithms.quickSort(items, partitionIndex + 1, right);
