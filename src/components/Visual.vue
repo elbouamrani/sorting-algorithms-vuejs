@@ -24,7 +24,7 @@ export default {
 }
 
 .candle {
-  width: 2pt;
+  width: 0pt;
   background-color: gray;
   border: 1px solid black;
   margin-right: 2pt;
