@@ -9,67 +9,83 @@ const validateur = (data) => {
   return true;
 };
 
-export const Sorter = (data, algorithm) => {
-  const emitter = (itemToSwap) => {
-    Bus.$emit("swap", itemToSwap);
-  };
+const swap = (items, i, j) => {
+  Bus.$emit("swap", [i, j]);
 
-  algorithm(data, emitter);
+  var tmp = items[i];
+  items[i] = items[j];
+  items[j] = tmp;
+};
+
+const partition = (items, pivot, left, right) => {
+  var pivotValue = items[pivot],
+    partitionIndex = left;
+
+  for (var i = left; i < right; i++) {
+    if (items[i] < pivotValue) {
+      swap(items, i, partitionIndex);
+      partitionIndex++;
+    }
+  }
+  swap(items, right, partitionIndex);
+  return partitionIndex;
+};
+
+export const Sorter = (data, algorithm) => {
+  algorithm([...data]);
 };
 
 export const Algorithms = {
-  simple: (data) => {
-    const items = [...data];
-
+  simple: (items) => {
     while (!validateur(items)) {
       for (let index = 0; index < items.length; index++) {
         if (index + 1 === items.length) break;
         if (items[index] > items[index + 1]) {
-          Bus.$emit("swap", [index, index + 1]);
-          const tmp = items[index + 1];
-          items[index + 1] = items[index];
-          items[index] = tmp;
+          swap(items, index, index + 1);
         }
       }
     }
     return items;
   },
-  bubbleSort: (data) => {
-    console.log("bubbleSort");
-    const arr = [...data];
-
-    var len = arr.length;
-    for (var i = len - 1; i >= 0; i--) {
-      for (var j = 1; j <= i; j++) {
-        if (arr[j - 1] > arr[j]) {
-          var temp = arr[j - 1];
-          arr[j - 1] = arr[j];
-          arr[j] = temp;
-          Bus.$emit("swap", [j, j - 1]);
+  bubbleSort: (items) => {
+    for (let i = items.length - 1; i >= 0; i--) {
+      for (let j = 1; j <= i; j++) {
+        if (items[j - 1] > items[j]) {
+          swap(items, j, j - 1);
         }
       }
     }
-    return arr;
+    return items;
   },
-  selectionSort: (data) => {
-    console.log("selectionSort");
-    const arr = [...data];
+  selectionSort: (items) => {
+    let minIndex;
 
-    var minIdx,
-      temp,
-      len = arr.length;
-    for (var i = 0; i < len; i++) {
-      minIdx = i;
-      for (var j = i + 1; j < len; j++) {
-        if (arr[j] < arr[minIdx]) {
-          minIdx = j;
+    for (let i = 0; i < items.length; i++) {
+      minIndex = i;
+      for (let j = i + 1; j < items.length; j++) {
+        if (items[j] < items[minIndex]) {
+          minIndex = j;
         }
       }
-      temp = arr[i];
-      arr[i] = arr[minIdx];
-      arr[minIdx] = temp;
-      Bus.$emit("swap", [minIdx, i]);
+      swap(items, minIndex, i);
     }
-    return arr;
+    return items;
+  },
+  quickSort: (items, left = 0, right) => {
+    var pivot, partitionIndex;
+
+    if (!right) {
+      right = items.length;
+    }
+    console.log(right);
+
+    if (left < right) {
+      pivot = right;
+      partitionIndex = partition(items, pivot, left, right);
+
+      Algorithms.quickSort(items, left, partitionIndex - 1);
+      Algorithms.quickSort(items, partitionIndex + 1, right);
+    }
+    return items;
   }
 };

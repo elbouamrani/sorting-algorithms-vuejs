@@ -52,6 +52,7 @@ export default {
     reset() {
       this.generateItems();
       this.setupTicker();
+      this.swaps = [];
     },
     sort() {
       if (this.algorithm) {
